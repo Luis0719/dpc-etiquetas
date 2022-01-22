@@ -1,7 +1,12 @@
+const fs = require("fs/promises");
+
 function setup(app) {
-  app.get('/', function (req, res) {
-    res.render('index', { message: 'Hello there!' })
-  })
+  app.get('/', async function (req, res) {
+    const etiquetasRaw = await fs.readFile("src/etiquetas.meta.json");
+    const etiquetas = JSON.parse(etiquetasRaw);
+
+    return res.render('index', { items: etiquetas });
+  });
 }
 
 module.exports = setup;

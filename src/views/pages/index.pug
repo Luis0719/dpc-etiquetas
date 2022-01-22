@@ -1,4 +1,35 @@
 extends ../layout/header
 
 block content
-  .div=message
+  div.inline
+    h2="Perfumes disponibles:"
+    i="Max 123 etiqutas por página"
+    div
+      i="Se han seleccionado "
+      i#count=0
+      i=" etiquetas"
+    div.mb-1
+      button="Aceptar"
+    each x in items
+      div
+        input(
+          id=x.path
+          type='checkbox',
+          name='cb-etiquetas')
+        label(for=x.path)=x.name
+        input.tag-amount(
+          id=`${x.path}-amount`,
+          type='number',
+          min=0,
+          max=100,
+          value=0,
+          data-checkbox=x.path
+        )
+  div.inline
+    h2="Preview"
+
+block scripts
+  script(
+    type="text/javascript",
+    src="js/index.js"
+  )
