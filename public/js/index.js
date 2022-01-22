@@ -1,17 +1,14 @@
-document.getElementsByName("cb-etiquetas").forEach(x => {
-  x.addEventListener('click', handleSelectedTagsChange);
-});
 htmlCollectionToArray(document.getElementsByClassName("tag-amount")).forEach(x => {
   x.addEventListener('click', handleTagAmountChange);
 });
 
 function handleTagAmountChange() {
   const input = this;
-  const checkbox = document.getElementById(input.getAttribute('data-checkbox'));
+  const label = document.getElementById(input.getAttribute('data-label'));
   if (+this.value > 0) {
-    checkbox.checked = true;
+    label.classList.add('selected');
   } else {
-    checkbox.checked = false;
+    label.classList.remove('selected');
   }
 
   handleSelectedTagsChange()

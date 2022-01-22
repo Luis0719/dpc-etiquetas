@@ -8,25 +8,28 @@ block content
       i="Se han seleccionado "
       i#count=0
       i=" etiquetas"
-    div.mb-1
-      button="Aceptar"
-    each x in items
-      div
-        input(
-          id=x.path
-          type='checkbox',
-          name='cb-etiquetas')
-        label(for=x.path)=x.name
-        input.tag-amount(
-          id=`${x.path}-amount`,
-          type='number',
-          min=0,
-          max=100,
-          value=0,
-          data-checkbox=x.path
-        )
-  div.inline
-    h2="Preview"
+    form(
+      method="POST",
+      action="/preview"
+    )
+      button(
+        type="submit"
+      )="Aceptar"
+      each x in etiquetas
+        div
+          label.tag-amount(
+            for=x.path,
+            id=`${x.path}-label`
+          )=x.name
+          input.tag-amount(
+            id=x.path,
+            name=`${x.path}-amount`
+            type='number',
+            min=0,
+            max=100,
+            value=0,
+            data-label=`${x.path}-label`
+          )
 
 block scripts
   script(
