@@ -5,7 +5,7 @@ const port = 3000
 function start() {
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
-  })
+  });
 
   return app;
 }
