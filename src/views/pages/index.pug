@@ -3,7 +3,9 @@ extends ../layout/header
 block content
   div.inline
     h2="Perfumes disponibles:"
-    i="Max 123 etiqutas por página"
+    i="Max 45 etiquetas por página (se pueden crear varias páginas)"
+    div.mb-1
+      i="5 por fila"
     div
       i="Se han seleccionado "
       i#count=0
@@ -17,19 +19,19 @@ block content
       )="Aceptar"
       each x in etiquetas
         div
-          label.tag-amount(
-            for=x.path,
-            id=`${x.path}-label`
-          )=x.name
           input.tag-amount(
             id=x.path,
-            name=`${x.path}-amount`
+            name=x.path
             type='number',
             min=0,
             max=100,
             value=0,
             data-label=`${x.path}-label`
           )
+          label.tag-amount(
+            for=x.path,
+            id=`${x.path}-label`
+          )=x.name
 
 block scripts
   script(

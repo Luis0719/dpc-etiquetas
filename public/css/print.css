@@ -1,0 +1,22 @@
+@media print {
+  @page {
+    size: 217mm 279mm;
+    margin: 0mm 0mm 0mm 0mm;
+    size: landscape
+  }
+
+  div.preview {
+    border: none;
+  }
+}
+
+@media screen {
+  div.preview-page {
+    border: 1px solid black;
+    width: 180mm; /* Hardcoded value to allow 5 items per row. Real size convertion allows up to 6, which is incorrect */
+    height: 225mm;
+    /* width: 820px;
+    height: 1054px; */
+    /* padding: 30mm 45mm 30mm 45mm; */
+  }
+}

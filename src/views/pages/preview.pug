@@ -1,8 +1,12 @@
 extends ../layout/header
 
+block styles
+  link(rel="stylesheet", href="css/print.css")
+
 block content
-  ul
-    for x in etiquetas
-      li= x.name
+  for page in pages
+    div.preview-page.mb-1
+      for x in page
+          img(src=`files/etiquetas/${x}`, alt=x)
 
 block scripts
