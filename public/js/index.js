@@ -1,38 +1,36 @@
-htmlCollectionToArray(document.getElementsByClassName("tag-amount")).forEach(x => {
-  x.addEventListener('click', handleTagAmountChange);
-});
+htmlCollectionToArray(document.getElementsByClassName("tag-amount")).forEach(
+  (x) => {
+    x.addEventListener("click", handleTagAmountChange);
+  }
+);
 
 function handleTagAmountChange() {
   const input = this;
-  const label = document.getElementById(input.getAttribute('data-label'));
+  const label = document.getElementById(input.getAttribute("data-label"));
   if (+this.value > 0) {
-    label.classList.add('selected');
+    label.classList.add("selected");
   } else {
-    label.classList.remove('selected');
+    label.classList.remove("selected");
   }
 
-  handleSelectedTagsChange()
+  handleSelectedTagsChange();
 }
 
 function handleSelectedTagsChange() {
   const totalSelected = getTotalSelectedTags();
 
-  const totalSpan = document.getElementById('count');
+  const totalSpan = document.getElementById("count");
   totalSpan.textContent = totalSelected;
 }
 
 function getTotalSelectedTags() {
-  const tags = htmlCollectionToArray(document.getElementsByName("cb-etiquetas"));
-  const checkedTags = tags.filter(x => x.checked);
+  const tags = htmlCollectionToArray(
+    document.getElementsByClassName("tag-amount")
+  );
 
-  const amountPerTag = checkedTags.map(x => {
-    return document.getElementById(`${x.id}-amount`);
-  });
-
-  const total = amountPerTag.reduce((total, x) => {
-    return total + (+x.value);
+  const total = tags.reduce((total, x) => {
+    return total + +x.value;
   }, 0);
 
   return total;
 }
-
