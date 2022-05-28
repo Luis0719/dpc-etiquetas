@@ -25,3 +25,7 @@ label.selected {
   font-weight: bold;
   color: #31503a;
 }
+
+.error {
+  color: #822727;
+}

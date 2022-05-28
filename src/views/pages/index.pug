@@ -1,6 +1,22 @@
 extends ../layout/header
 
 block content
+  div
+    h2="Crear nueva etiqueta"
+    form(
+        method="POST",
+        action="/create"
+      )
+        input(
+          name="name",
+          placeholder="Nombre del perfume"
+          minlength=2
+          required=true
+        )
+        span.error=error
+        button(
+          type="submit"
+        )="Crear"
   div.inline
     h2="Perfumes disponibles:"
     i="Max 45 etiquetas por página (se pueden crear varias páginas)"

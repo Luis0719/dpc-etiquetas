@@ -1,4 +1,32 @@
 const { readdir } = require("fs/promises");
+const datefns = require("date-fns");
+
+const etiquetasController = require("./etiquetasController");
+
+let lastCreateRequest = null;
+
+// Avoid an attack were we receive multiple create requests at once
+const CREATE_INTERVAL = 30; // 5 seconds
+function validateCreateRequest(req, res, next) {
+  if (!lastCreateRequest) {
+    lastCreateRequest = new Date();
+    return next();
+  }
+
+  const nextAllowedRequest = datefns.add(lastCreateRequest, {
+    seconds: CREATE_INTERVAL,
+  });
+  if (datefns.isBefore(new Date(), nextAllowedRequest)) {
+    return res.redirect(
+      "/?error=solo puedes create etiquetas cada " +
+        CREATE_INTERVAL +
+        " segundos"
+    );
+  }
+
+  lastCreateRequest = new Date();
+  return next();
+}
 
 function setup(app) {
   app.get("/", async function (req, res) {
@@ -8,7 +36,24 @@ function setup(app) {
       return a.localeCompare(b);
     });
 
-    return res.render("index", { etiquetas });
+    let error = req.query.error;
+
+    return res.render("index", { etiquetas, error });
+  });
+
+  app.post("/create", validateCreateRequest, async function (req, res) {
+    let name = req.body.name;
+    const [err, result] = await etiquetasController.create(name);
+
+    if (err) {
+      return res.status(500).send();
+    }
+
+    if (result !== true) {
+      return res.redirect("/?error=" + result);
+    }
+
+    return res.redirect("/");
   });
 
   app.post("/preview", async function (req, res) {
