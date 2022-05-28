@@ -20,18 +20,18 @@ block content
       each x in etiquetas
         div
           input.tag-amount(
-            id=x.path,
-            name=x.path
+            id=x,
+            name=x
             type='number',
             min=0,
             max=100,
             value=0,
-            data-label=`${x.path}-label`
+            data-label=`${x}-label`
           )
           label(
-            for=x.path,
-            id=`${x.path}-label`
-          )=x.name
+            for=x,
+            id=`${x}-label`
+          )=x
 
 block scripts
   script(
