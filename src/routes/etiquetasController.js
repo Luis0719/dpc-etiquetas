@@ -58,7 +58,10 @@ async function create(name) {
     return [err, null];
   }
 
-  const propsToChange = [["template", namePerRows[0]]];
+  const propsToChange = [
+    ["template", namePerRows[0]],
+    ["&", "&amp;"],
+  ];
   let data = await readFile(outFile, "utf-8");
 
   for (let prop of propsToChange) {
