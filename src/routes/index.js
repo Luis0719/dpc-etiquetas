@@ -6,7 +6,7 @@ const etiquetasController = require("./etiquetasController");
 let lastCreateRequest = null;
 
 // Avoid an attack were we receive multiple create requests at once
-const CREATE_INTERVAL = 30; // 5 seconds
+const CREATE_INTERVAL = 10; // 5 seconds
 function validateCreateRequest(req, res, next) {
   if (!lastCreateRequest) {
     lastCreateRequest = new Date();
