@@ -30,19 +30,8 @@ function splitNameByRows(name) {
   return rows;
 }
 
-async function create(name) {
-  const template = __dirname + "/templates/template.svg";
-  const outFile = resolve(
-    __dirname + "/../../public/files/etiquetas/" + name + ".svg"
-  );
-
-  namePerRows = splitNameByRows(name);
-
-  // TODO: Support multiline names
-  if (namePerRows.length > 1) {
-    return [null, "Nombres mayores a 20 letras no están soportados todavía"];
-  }
-
+// Returns error. Undefined means everything is ok
+async function copyFromTemplate(template, outFile) {
   // Cleanup any existing file with this name
   try {
     await rm(outFile);
@@ -55,14 +44,12 @@ async function create(name) {
   } catch (err) {
     console.log("Failed to copy template");
     console.log(err);
-    return [err, null];
+    return err;
   }
+}
 
-  const propsToChange = [
-    ["template", namePerRows[0]],
-    ["&", "&amp;"],
-  ];
-  let data = await readFile(outFile, "utf-8");
+async function updateTagSvg(svgFile, propsToChange) {
+  let data = await readFile(svgFile, "utf-8");
 
   for (let prop of propsToChange) {
     regex = new RegExp(prop[0], "g");
@@ -70,15 +57,63 @@ async function create(name) {
   }
 
   try {
-    await writeFile(outFile, data, {
+    await writeFile(svgFile, data, {
       encoding: "utf-8",
       flag: "w",
     });
   } catch (err) {
     console.log(err);
   }
+}
+
+async function createSimpleTag(fullName, namePerRows) {
+  const template = __dirname + "/templates/template.svg";
+  const outFile = resolve(
+    __dirname + "/../../public/files/etiquetas/" + fullName + ".svg"
+  );
+
+  const err = await copyFromTemplate(template, outFile);
+  if (err) return [err, null];
+
+  const propsToChange = [
+    ["template", namePerRows[0]],
+    ["&", "&amp;"],
+  ];
+  await updateTagSvg(outFile, propsToChange);
 
   return [null, true];
+}
+
+async function createMultilineTag(fullName, namePerRows) {
+  const template = __dirname + "/templates/multiline_template.svg";
+  const outFile = resolve(
+    __dirname + "/../../public/files/etiquetas/" + fullName + ".svg"
+  );
+
+  const err = await copyFromTemplate(template, outFile);
+  if (err) return [err, null];
+
+  const propsToChange = [
+    ["template_l1", namePerRows[0]],
+    ["template_l2", namePerRows[1]],
+    ["template", fullName],
+    ["&", "&amp;"],
+  ];
+  await updateTagSvg(outFile, propsToChange);
+
+  return [null, true];
+}
+
+async function create(name) {
+  let namePerRows = splitNameByRows(name);
+
+  if (namePerRows.length > 2) {
+    return [null, "Nombres mayores a 40 letras no están soportados todavía"];
+  }
+
+  return namePerRows.length == 1
+    ? createSimpleTag(name, namePerRows)
+    : createMultilineTag(name, namePerRows);
 }
 
 module.exports = { create };
