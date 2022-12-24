@@ -33,6 +33,20 @@ block content
       button(
         type="submit"
       )="Aceptar"
+      div
+        label(for="cb-todos")="Todos? "
+        input(
+          id="cb-todos"
+          type="checkbox"
+        )
+        span= "cuántos?"
+        input(
+          id="inp-todos"
+          type="number"
+          min=0,
+          max=45,
+          value=45,
+        )
       each x in etiquetas
         div
           input.tag-amount(

@@ -4,6 +4,14 @@ htmlCollectionToArray(document.getElementsByClassName("tag-amount")).forEach(
   }
 );
 
+document
+  .getElementById("cb-todos")
+  .addEventListener("change", handleTodosChange);
+
+document
+  .getElementById("inp-todos")
+  .addEventListener("change", handleTodosChange);
+
 function handleTagAmountChange() {
   const input = this;
   const label = document.getElementById(input.getAttribute("data-label"));
@@ -33,4 +41,16 @@ function getTotalSelectedTags() {
   }, 0);
 
   return total;
+}
+
+function handleTodosChange() {
+  const tags = document.getElementsByClassName("tag-amount");
+  let amount = document.getElementById("inp-todos").value;
+  const cb = document.getElementById("cb-todos");
+
+  if (!cb.checked) amount = 0;
+
+  for (const tag of tags) {
+    tag.value = amount;
+  }
 }
